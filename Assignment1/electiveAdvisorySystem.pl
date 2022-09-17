@@ -5,7 +5,7 @@ course('CSE344/CSE544/ECE344/ECE544', 'CV', 'Computer Vision', ['MTH100'], [], [
 course('CSE340/CSE540/ECE340', 'DIP', 'Digital Image Processing', ['MTH100', 'MTH201'], [], [monsoon], [cse]).
 course('CSE320/CSE520', 'AA', 'Advanced Algorithms', ['CSE102'], [], [monsoon], [cse]).
 course('CSE562', 'ACV', 'Advanced Computer Vision', ['CSE344/CSE544/ECE344/ECE544'], [], [monsoon], [cse]).
-course('CSE642', 'AML', 'Advanced Machine Learning', ['MTH201', 'CSE343/CSE543/ECE563', 'CSE342/CSE542'], ['APRML'], [monsoon], [cse]).
+course('CSE642', 'AML', 'Advanced Machine Learning', ['MTH201', 'CSE343/CSE543/ECE563', 'CSE342/CSE542'], [], [monsoon], [cse]).
 course('CSE201', 'AP', 'Advanced Programming', ['CSE101, CSE102'], [], [monsoon], [cse]).
 course('CSE661/DES507', 'AFC', 'Affective Computing', ['CSE101', 'CSE102', 'CSE201'], [], [monsoon], [cse]).
 course('CSE643', 'AI', 'Artificial Intelligence', ['CSE102'], [], [monsoon], [cse]).
