@@ -1,18 +1,20 @@
-% course(code, short form, full name, pre-reqs, anti-reqs, semester, department)
-
 % CSE Courses
+course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [cse]).
+course('BIO546/CSE585', 'CM', 'Computing for Medicine', [], [], [monsoon], [cse]).
+course('CSE344/CSE544/ECE344/ECE544', 'CV', 'Computer Vision', ['MTH100'], [], [winter], [cse]).
+course('CSE340/CSE540/ECE340', 'DIP', 'Digital Image Processing', ['MTH100', 'MTH201'], [], [monsoon], [cse]).
 course('CSE320/CSE520', 'AA', 'Advanced Algorithms', ['CSE102'], [], [monsoon], [cse]).
 course('CSE562', 'ACV', 'Advanced Computer Vision', ['CSE344/CSE544/ECE344/ECE544'], [], [monsoon], [cse]).
 course('CSE642', 'AML', 'Advanced Machine Learning', ['MTH201', 'CSE343/CSE543/ECE563', 'CSE342/CSE542'], ['APRML'], [monsoon], [cse]).
-course('CSE201', 'AP', 'Advanced Programming', ['CSE101, CSE102	'], [], [monsoon], [cse]).
-course('CSE661/DES507', 'AFC', 'Affective Computing', ['CSE101', 'CSE102', 'CSE201'], [], [monsoon], [cse, des]).
+course('CSE201', 'AP', 'Advanced Programming', ['CSE101, CSE102'], [], [monsoon], [cse]).
+course('CSE661/DES507', 'AFC', 'Affective Computing', ['CSE101', 'CSE102', 'CSE201'], [], [monsoon], [cse]).
 course('CSE643', 'AI', 'Artificial Intelligence', ['CSE102'], [], [monsoon], [cse]).
-course('CSE515/ECE551', 'BML', 'Bayesian Machine Learning', ['MTH201'], [], [monsoon], [cse, ece]).
+course('CSE515/ECE551', 'BML', 'Bayesian Machine Learning', ['MTH201'], [], [monsoon], [cse]).
 course('CSE569', 'CldC', 'Cloud Computing', ['CSE232'], [], [monsoon], [cse]).
 course('CSE640', 'CF', 'Collaborative Filtering', ['MTH100'], [], [monsoon], [cse]).
 course('CSE301/CSE601', 'CMP', 'Compilers', ['MTH100', 'CSE101', 'CSE201', 'CSE102'], [], [monsoon], [cse]).
 course('CSE421/CSE621', 'CMPT', 'Complexity Theory', ['CSE102', 'MTH201', 'CSE322', 'CSE121'], [], [monsoon], [cse]).
-course('CSE511/ECE511', 'CA', 'Computer Architecture', [], [], [monsoon], [cse, ece]).
+course('CSE511/ECE511', 'CA', 'Computer Architecture', [], [], [monsoon], [cse]).
 course('CSE333/CSE533', 'CG', 'Computer Graphics', ['CSE101'], [], [monsoon], [cse]).
 course('CSE232', 'CN', 'Computer Networks', ['CSE101', 'CSE231', 'CSE222'], [], [monsoon], [cse]).
 course('CSE606A', 'DML', 'Data Lifecycle Management', ['CSE343/CSE543/ECE563'], [], [monsoon], [cse]).
@@ -28,7 +30,7 @@ course('CSE525', 'GA', 'Introduction to Graduate Algorithms', ['CSE222'], [], [m
 course('CSE101', 'IP', 'Introduction to Programming', [], [], [monsoon], [cse]).
 course('CSE555', 'ISC', 'Introduction to Spatial Computing', ['CSE102', 'CSE202'], [], [monsoon], [cse]).
 course('CSE605A', 'KG', 'Knowledge Graphs in Practice', ['CSE508'], [], [monsoon], [cse]).
-course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [cse, des]).
+course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [cse]).
 course('CSE535', 'MC', 'Mobile Computing', ['CSE101'], [], [monsoon], [cse]).
 course('CSE319/CSE519', 'MAD', 'Modern Algorithm Design', ['CSE222'], [], [monsoon], [cse]).
 course('CSE556', 'NLP', 'Natural Language Processing', ['CSE101', 'MTH201', 'CSE222', 'MTH100'], [], [monsoon], [cse]).
@@ -44,17 +46,21 @@ course('CSE576', 'SSIoT', 'Smart Sensing for Internet of Things (IoT)', [], [], 
 course('CSE565', 'SDN', 'Software Defined Networking', ['CSE232'], [], [monsoon], [cse]).
 course('CSE583', 'SDOS', 'Software Development using Open Source', [], [], [monsoon], [cse]).
 course('CSE582', 'SPEM', 'Software Production Evolution and Maintenance', [], [], [monsoon], [cse]).
-course('CSE572/ECE561', 'SAP', 'Speech and Audio Processing', ['MTH100', 'ECE250'], [], [monsoon], [cse, ece]).
+course('CSE572/ECE561', 'SAP', 'Speech and Audio Processing', ['MTH100', 'ECE250'], [], [monsoon], [cse]).
 course('CSE524', 'TMC', 'Theory of Modern cryptography', [], [], [monsoon], [cse]).
 course('CSE651', 'TAC', 'Topics in Adaptive Cybersecurity', ['CSE345/CSE545'], [], [monsoon], [cse]).
 course('CSE701', 'TSE', 'Topics in Software Engineering: AI in SE', [], [], [monsoon], [cse]).
 course('CSE546', 'AC', 'Applied Cryptography', ['CSE121'], [], [monsoon, winter], [cse]).
 course('CSE5GP', 'GP', 'Geometry Processing', ['CSE101'], [], [monsoon, winter], [cse]).
 course('CSE571', 'IMC', 'Introduction to Media Computing', [], [], [monsoon, winter], [cse]).
-course('CSE343/CSE543/ECE563', 'ML', 'Machine Learning', ['MTH100', 'MTH201', 'CSE101', 'MTH203'], [], [monsoon, winter], [cse, ece]).
-course('CSE531', 'MAS', 'Multi-Agent Systems', [], [], [monsoon, winter], [cse]).
-course('CSE580A', 'OM', 'Ontology Modeling', ['CSE102'], [], [monsoon, winter], [cse]).
-course('CSE552', 'SE', 'Security Engineering', ['CSE231'], [], [monsoon, winter], [cse]).
+course('CSE343/CSE543/ECE563', 'ML', 'Machine Learning', ['MTH100', 'MTH201', 'CSE101', 'MTH203'], [], [monsoon], [cse]).
+course('CSE343/CSE543/ECE563', 'ML', 'Machine Learning', ['MTH100', 'MTH201', 'CSE101', 'MTH203'], [], [winter], [cse]).
+course('CSE531', 'MAS', 'Multi-Agent Systems', [], [], [monsoon], [cse]).
+course('CSE531', 'MAS', 'Multi-Agent Systems', [], [], [winter], [cse]).
+course('CSE580A', 'OM', 'Ontology Modeling', ['CSE102'], [], [monsoon], [cse]).
+course('CSE580A', 'OM', 'Ontology Modeling', ['CSE102'], [], [winter], [cse]).
+course('CSE552', 'SE', 'Security Engineering', ['CSE231'], [], [monsoon], [cse]).
+course('CSE552', 'SE', 'Security Engineering', ['CSE231'], [], [winter], [cse]).
 course('CSE441/CSE541', 'BIOM', 'Advanced Biometrics', ['CSE343/CSE543/ECE563'], [], [winter], [cse]).
 course('CSE577', 'AIOT', 'Advanced Internet of Things', [], [], [winter], [cse]).
 course('CSE631', 'AOS', 'Advanced Operating Systems', ['CSE231'], [], [winter], [cse]).
@@ -63,13 +69,13 @@ course('CSE222', 'ADA', 'Algorithm Design and Analysis', ['CSE102'], [], [winter
 course('CSE223', 'ALD', 'Algorithm Design and Analysis', ['CSE102'], [], [winter], [cse]).
 course('CSE529', 'AAG', 'Approximation Algorithms', ['CSE222'], [], [winter], [cse]).
 course('CSE557', 'BDA', 'Big Data Analytics	', ['CSE202'], [], [winter], [cse]).
-course('CSE636/ECE636', 'COMN', 'Communication Networks', ['MTH201'], [], [winter], [cse, ece]).
+course('CSE636/ECE636', 'COMN', 'Communication Networks', ['MTH201'], [], [winter], [cse]).
 course('CSE112', 'CO', 'Computer Organization', ['ECE111'], [], [winter], [cse]).
 course('CSE518', 'CLDS', 'Concurrent and Learned Data Structures', ['CSE101', 'CSE102', 'CSE201', 'CSE231'], [], [winter], [cse]).
 course('CSE102', 'DSA', 'Data Structures & Algorithms', ['CSE101'], [], [winter], [cse]).
 course('CSE606', 'DW', 'Data Warehouse', ['CSE202'], [], [winter], [cse]).
 course('CSE504', 'DP', 'Decision Procedures', ['CSE102', 'CSE121'], [], [winter], [cse]).
-course('CSE641/ESE553', 'DL', 'Deep Learning', [], [], [winter], [cse, ece]).
+course('CSE641/ESE553', 'DL', 'Deep Learning', [], [], [winter], [cse]).
 course('CSE663', 'EAI', 'Edge AI', ['CSE343/CSE543/ECE563', 'CSE342/CSE542'], [], [winter], [cse]).
 course('CSE502', 'FPP', 'Foundations of Parallel Programming', ['CSE101', 'CSE102', 'CSE201'], [], [winter], [cse]).
 course('CSE202', 'DBMS', 'Fundamentals of Database Management System', ['CSE102'], [], [winter], [cse]).
@@ -82,7 +88,7 @@ course('CSE577', 'MLRC', 'Machine Learning Techniques for Real-time Control', []
 course('CSE618', 'MTL', 'Meta-Learning', ['CSE641'], [], [winter], [cse]).
 course('CSE559', 'MLN', 'Mining Large Networks', ['CSE222', 'CSE101', 'MTH201'], [], [winter], [cse]).
 course('CSE563', 'MCA', 'Multimedia Computing and Applications', [], [], [winter], [cse]).
-course('CSE694F/ECE651', 'MS', 'Multimedia Security', ['ESE350'], [], [winter], [cse, ece]).
+course('CSE694F/ECE651', 'MS', 'Multimedia Security', ['ESE350'], [], [winter], [cse]).
 course('CSE655', 'NS', 'Network Science', [], [], [winter], [cse]).
 course('CSE354/CSE554', 'NSS-II', 'Networks and System Security II', ['CSE231', 'CSE232'], [], [winter], [cse]).
 course('CSE645', 'PSOSM', 'Privacy and Security in Online Social Media', [], [], [winter], [cse]).
@@ -94,27 +100,36 @@ course('CSE568', 'SNA', 'Social Network Analysis', ['CSE222', 'CSE101', 'MTH201'
 course('CSE633A', 'SR', 'Social Robotics', [], [], [winter], [cse]).
 course('CSE662A', 'SCV', 'Special Topics in Computer Vision', ['ECE350'], [], [winter], [cse]).
 course('CSE609', 'SComp', 'Statistical Computation', ['MTH201'], [], [winter], [cse]).
-course('CSE342/CSE542/ECE356/ECE556', 'SML', 'Statistical Machine Learning', ['CSE101', 'MTH201'], [], [winter], [cse, ece]).
+course('CSE342/CSE542/ECE356/ECE556', 'SML', 'Statistical Machine Learning', ['CSE101', 'MTH201'], [], [winter], [cse]).
 course('CSE581', 'SADRE', 'Systems Analysis, Design and Requirements Engineering', [], [], [winter], [cse]).
-course('CSE516/ECE559', 'TDL', 'Theories of Deep Learning', ['MTH100', 'MTH203', 'CSE343/CSE543/ECE563'], [], [winter], [cse, ece]).
+course('CSE516/ECE559', 'TDL', 'Theories of Deep Learning', ['MTH100', 'MTH203', 'CSE343/CSE543/ECE563'], [], [winter], [cse]).
 course('CSE322', 'ToC', 'Theory of Computation', ['CSE121'], [], [winter], [cse]).
 course('CSE793A', 'TC', 'Topics in Cryptanalysis', [], [], [winter], [cse]).
 course('CSE660', 'TAIS', 'Trustworthy AI systems', ['CSE643', 'CSE343/CSE543/ECE563'], ['CSE660A'], [winter], [cse]).
 course('CSE570', 'VR', 'Virtual Reality', [], [], [winter], [cse]).
-course('CSE538/ECE538', 'WN', 'Wireless Networks', ['CSE232'], [], [winter], [cse, ece]).
+course('CSE538/ECE538', 'WN', 'Wireless Networks', ['CSE232'], [], [winter], [cse]).
 
 % ECE Courses
+course('CSE538/ECE538', 'WN', 'Wireless Networks', ['CSE232'], [], [winter], [ece]).
+course('CSE516/ECE559', 'TDL', 'Theories of Deep Learning', ['MTH100', 'MTH203', 'CSE343/CSE543/ECE563'], [], [winter], [ece]).
+course('CSE342/CSE542/ECE356/ECE556', 'SML', 'Statistical Machine Learning', ['CSE101', 'MTH201'], [], [winter], [ece]).
+course('CSE694F/ECE651', 'MS', 'Multimedia Security', ['ESE350'], [], [winter], [ece]).
+course('CSE641/ESE553', 'DL', 'Deep Learning', [], [], [winter], [ece]).
+course('CSE636/ECE636', 'COMN', 'Communication Networks', ['MTH201'], [], [winter], [ece]).
+course('CSE343/CSE543/ECE563', 'ML', 'Machine Learning', ['MTH100', 'MTH201', 'CSE101', 'MTH203'], [], [monsoon], [ece]).
+course('CSE343/CSE543/ECE563', 'ML', 'Machine Learning', ['MTH100', 'MTH201', 'CSE101', 'MTH203'], [], [winter], [ece]).
+course('CSE572/ECE561', 'SAP', 'Speech and Audio Processing', ['MTH100', 'ECE250'], [], [monsoon], [ece]).
+course('CSE511/ECE511', 'CA', 'Computer Architecture', [], [], [monsoon], [ece]).
+course('CSE515/ECE551', 'BML', 'Bayesian Machine Learning', ['MTH201'], [], [monsoon], [ece]).
 course('ECE315/ECE515', 'CMOS', 'Analog CMOS Circuit Design', [], [], [monsoon], [ece]).
 course('ECE431/ECE631', 'ATD', 'Antennas Theory and Design', ['ECE230'], [], [monsoon], [ece]).
-course('CSE515/ECE551', 'BML', 'Bayesian Machine Learning', ['MTH201'], [], [monsoon], [ece, cse]).
 course('ECE215', 'CTD', 'Circuit Theory and Devices', [], [], [monsoon], [ece]).
 course('ECE554', 'CS', 'Compressive Sensing', ['MTH100'], [], [monsoon], [ece]).
-course('CSE511/ECE511', 'CA', 'Computer Architecture', [], [], [monsoon], [ece, cse]).
 course('ECE560', 'DPM', 'Data Processing and Management', [], ['CSE201'], [monsoon], [ece]).
 course('ECE111', 'DC', 'Digital Circuits', [], [], [monsoon], [ece]).
 course('ECE340', 'DCS', 'Digital Communication Systems', ['ECE240'], [], [monsoon], [ece]).
 course('ECE510', 'DHD', 'Digital Hardware Design', ['ECE270'], [], [monsoon], [ece]).
-course('CSE340/CSE540/ECE340', 'DIP', 'Digital Image Processing', ['MTH100', 'MTH201'], [], [monsoon], [ece, cse]).
+course('CSE340/CSE540/ECE340', 'DIP', 'Digital Image Processing', ['MTH100', 'MTH201'], [], [monsoon], [ece]).
 course('ECE351', 'DSP', 'Digital Signal Processing', ['ECE250'], [], [monsoon], [ece]).
 course('ECE314/ECE514', 'DVD', 'Digital VLSI Design', [], [], [monsoon], [ece]).
 course('ECE270', 'ELD', 'Embedded Logic Design', [], [], [monsoon], [ece]).
@@ -140,8 +155,7 @@ course('ECE573', 'AELD', 'Advanced Embedded Logic Design', ['CSE234'], [], [wint
 course('ECE5aom', 'AOMML', 'Applied Optimization Methods for Machine Learning', ['MTH201', 'MTH270'], [], [winter], [ece]).
 course('ECE581', 'AD', 'Autonomous Driving', [], [], [winter], [ece]).
 course('ECE113', 'BE', 'Basic Electronics', [], [], [winter], [ece]).
-course('CSE636/ECE636', 'COMN', 'Communication Networks', ['MTH201'], [], [winter], [ece, cse]).
-course('CSE344/CSE544/ECE344/ECE544', 'CV', 'Computer Vision', ['MTH100'], [], [winter], [ece, cse]).
+course('CSE344/CSE544/ECE344/ECE544', 'CV', 'Computer Vision', ['MTH100'], [], [winter], [ece]).
 course('ECE5et', 'ET', 'Estimation Theory for dynamic systems', ['ECE501'], [], [winter], [ece]).
 course('ECE230', 'F&W', 'Fields and Waves', ['MTH203'], [], [winter], [ece]).
 course('ECE214', 'IE', 'Integrated Electronics', ['ECE111', 'ECE113', 'DES130'], [], [winter], [ece]).
@@ -151,7 +165,6 @@ course('ECE611', 'MDT', 'Memory Design and Testing', ['ECE111', 'ECE113'], [], [
 course('ECE412/ECE612', 'MSD', 'Mixed Signal Design', ['ECE315/ECE515'], [], [winter], [ece]).
 course('ECE343', 'MCOM', 'Mobile Communications', ['ECE240'], [], [winter], [ece]).
 course('ECE55G', '5GN', 'Modeling and Analysis of Random 5G Networks', ['MTH201'], [], [winter], [ece]).
-course('CSE694F/ECE651', 'MS', 'Multimedia Security', ['ECE350'], [], [winter], [ece, cse]).
 course('ECE534', 'OCS', 'Optical Communications Systems', ['ECE240'], [], [winter], [ece]).
 course('ECE571', 'OCNS', 'Optimal Control Systems', [], [], [winter], [ece]).
 course('ECE240', 'PCS', 'Principles of Communication Systems', ['ECE250', 'MTH201'], [], [winter], [ece]).
@@ -161,10 +174,8 @@ course('CSE633/ECE670', 'IRob', 'Robotics', [], [], [winter], [ece, cse]).
 course('ECE557', 'SRU', 'Speech Recognition and Understanding', ['ECE250'], [], [winter], [ece]).
 course('ECE452/ECE552', 'SSP', 'Statistical Signal Processing', ['MTH100', 'MTH201', 'ECE250'], [], [winter], [ece]).
 course('ECE672', 'SEC', 'Stochastic Estimation and Control', ['ECE501'], [], [winter], [ece]).
-course('CSE516/ECE559', 'TDL', 'Theories of Deep Learning', ['MTH100', 'MTH203', 'CSE343/CSE543/ECE563'], [], [winter], [ece, cse]).
 course('ECE558', 'TLA', 'Transform Learning and Applications', ['MTH100'], ['ECE362/ECE562'], [winter], [ece]).
 course('ECE537', 'WCE', 'Wireless Communication Evolution from 3G to 5G', ['ECE240'], [], [winter], [ece]).
-course('CSE538/ECE538', 'WN', 'Wireless Networks', ['CSE232'], [], [winter], [ece, cse]).
 course('ECE539', 'WSI', 'Wireless System Implementation', ['ECE240'], [], [winter], [ece]).
 
 % Math Courses
@@ -186,7 +197,8 @@ course('MTH340', 'RA-II', 'Real Analysis-II', ['MTH240'], [], [monsoon], [mth]).
 course('MTH373', 'SC', 'Scientific Computing', ['MTH100'], ['MTH270'], [monsoon], [mth]).
 course('MTH371', 'SPA', 'Stochastic Processes and Applications', ['MTH201'], [], [monsoon], [mth]).
 course('MTH518', 'TNT', 'Topics in Number Theory', ['MTH211'], [], [monsoon], [mth]).
-course('MTH270', 'NM', 'Numerical Methods', ['MTH100', 'MTH204'], [], [monsoon, winter], [mth]).
+course('MTH270', 'NM', 'Numerical Methods', ['MTH100', 'MTH204'], [], [monsoon], [mth]).
+course('MTH270', 'NM', 'Numerical Methods', ['MTH100', 'MTH204'], [], [winter], [mth]).
 course('MTH212', 'AA-I', 'Abstract Algebra I', [], ['MTH302'], [winter], [mth]).
 course('MTH513', 'AA-II', 'Abstract Algebra II', ['MTH100', 'MTH212'], [], [winter], [mth]).
 course('MTH510', 'ALA', 'Advanced Linear Algebra', ['MTH100'], [], [winter], [mth]).
@@ -219,10 +231,10 @@ course('BIO361', 'BioP', 'Biophysics', [], [], [monsoon], [bio]).
 course('BIO211', 'CBBC', 'Cell Biology and Bio-Chemistry', [], ['BIO511'], [monsoon], [bio]).
 course('BIO511', 'CBB', 'Cell Biology and Bio-Chemistry', [], ['BIO211'], [monsoon], [bio]).
 course('BIO544', 'CGAS', 'Computational Gastronomy', [], [], [monsoon], [bio]).
-course('BIO546/CSE585', 'CM', 'Computing for Medicine', [], [], [monsoon], [bio, cse]).
+course('BIO546/CSE585', 'CM', 'Computing for Medicine', [], [], [monsoon], [bio]).
 course('BIO512', 'FOMB', 'Foundations of Modern Biology', [], ['BIO601', 'BIO214'], [monsoon], [bio]).
 course('BIO214', 'GMB', 'Genetics and Molecular Biology', [], [], [monsoon], [bio]).
-course('ENT421/BIO571', 'HIEE', 'Healthcare Innovation and Entrepreneurship Essentials', [], [], [monsoon], [bio, ssh]).
+course('ENT421/BIO571', 'HIEE', 'Healthcare Innovation and Entrepreneurship Essentials', [], [], [monsoon], [bio]).
 course('BIO542', 'MLBA', 'Machine Learning for Biomedical Applications', [], [], [monsoon], [bio]).
 course('BIO532', 'NB', 'Network Biology', [], [], [monsoon], [bio]).
 course('BIO506', 'SSSBB', 'Stochastic Simulations in Systems Biology and Biophysics', ['BIO531'], [], [monsoon], [bio]).
@@ -239,7 +251,9 @@ course('BIO221', 'PB', 'Practical Bioinformatics', [], [], [winter], [bio]).
 course('BIO533', 'S&SB', 'Systems and Synthetic Biology', ['BIO531', 'BIO501'], [], [winter], [bio]).
 
 % DES courses
+course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [des]).
 course('DES305', '3DAF', '3D Animation filmmaking', [], [], [monsoon], [des]).
+course('CSE661/DES507', 'AFC', 'Affective Computing', ['CSE101', 'CSE102', 'CSE201'], [], [monsoon], [des]).
 course('DES509', 'DF', 'Design Futures', ['DES205/DES519'], [], [monsoon], [des]).
 course('DES205/DES519', 'DIS', 'Design of Interactive Systems', [], [], [monsoon], [des]).
 course('DES201', 'DPP', 'Design Processes and Perspectives', ['DES101'], [], [monsoon], [des]).
@@ -253,7 +267,7 @@ course('DES515', 'ISPR', 'Information Systems in Public Health', [], [], [monsoo
 course('DES516', 'I3DD', 'Introduction to 3D Production Design for Animation and Games', [], [], [monsoon], [des]).
 course('DES302', 'IAG', 'Introduction to Animation and Graphics', [], [], [monsoon], [des]).
 course('DES518', 'IMG', 'Introduction to Motion Graphics', [], [], [monsoon], [des]).
-course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [des, cse]).
+course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [des]).
 course('DES130', 'PIS', 'Prototyping Interactive Systems', [], [], [monsoon], [des]).
 course('DES202', 'VDC', 'Visual Design & Communication', ['DES101'], [], [monsoon], [des]).
 course('DES513', 'WARDI', 'Wearable Applications, Research, Devices, Interactions', [], [], [monsoon], [des]).
@@ -269,6 +283,7 @@ course('DES102', 'IHCI', 'Introduction to HCI', [], [], [winter], [des]).
 course('DES504', 'NVC', 'Narratives in Visual Communication', [], [], [winter], [des]).
 
 % SSH Courses
+course('ENT421/BIO571', 'HIEE', 'Healthcare Innovation and Entrepreneurship Essentials', [], [], [monsoon], [ssh]).
 course('SOC311/SOC501', 'AERM', 'Advance Ethnographic Research Methods', ['SSH201'], [], [monsoon], [ssh]).
 course('ECO314', 'BEco', 'Behavioural Economics', ['MTH201'], [], [monsoon], [ssh]).
 course('SOC206', 'BA', 'Business Anthropology', [], [], [monsoon], [ssh]).
@@ -355,3 +370,31 @@ course('ENT413', 'EF', 'Entrepreneurial Finance', [], [], [winter], [oth]).
 course('ENT415', 'NVP', 'New Venture Planning', [], [], [winter], [oth]).
 course('ENT414', 'RIPS', 'Relevance of Intellectual Property for Startups', [], [], [winter], [oth]).
 course('ENG599s', 'RM', 'Research Methods', [], [], [winter], [oth]).
+
+start :-
+    write('Elective Advisory System for IIITD Btech Students'), nl,
+
+    % write('Enter the semester type (monsoon/winter): '), nl,
+    % read(SemType),
+
+    % write(SemType), nl,
+    
+    getCourses(monsoon).
+% course(code, short form, full name, pre-reqs, anti-reqs, semester, department)
+
+% searchCourses :-
+    % course(_, C, _, _, _, L, _)
+
+% getCourses(SemType) :-
+%     % course(C, A, B, D, E, G, F).
+%     findall(C, course(_, C, _, _, _, _, B), L),
+%     % printReqdCourses(L).
+%     write(L).
+
+% printReqdCourses([course(A, B, C, D, E, F, G)]) :-
+    % member(cse, G).
+
+
+getCourses(SemType) :-
+    % get list of courses in the given semester
+    findall(C, course(_, C, _, _, _, L, _), L1),
