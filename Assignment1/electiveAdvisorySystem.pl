@@ -373,28 +373,40 @@ course('ENG599s', 'RM', 'Research Methods', [], [], [winter], [oth]).
 
 start :-
     write('Elective Advisory System for IIITD Btech Students'), nl,
+    write('Enter the semester type (monsoon/winter): '), nl,
+    read(SemType),
+    write('Enter the department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
+    read(DepName),
+    getCourses(SemType, DepName).
 
-    % write('Enter the semester type (monsoon/winter): '), nl,
-    % read(SemType),
+sampleCourses(['COM', 'EEE']).
 
-    % write(SemType), nl,
-    
-    getCourses(monsoon).
 % course(code, short form, full name, pre-reqs, anti-reqs, semester, department)
 
 % searchCourses :-
     % course(_, C, _, _, _, L, _)
 
-% getCourses(SemType) :-
-%     % course(C, A, B, D, E, G, F).
-%     findall(C, course(_, C, _, _, _, _, B), L),
-%     % printReqdCourses(L).
-%     write(L).
+getCourses(SemType, DepName) :-
+    % course(C, A, B, D, E, G, F).
+    findall(ShortName, course(_, ShortName, _, _, _, [SemType], [DepName]), L),
+    % printReqdCourses(L).
+    % write(L).
+    % printList(L).
+    printList(L, ['COM', 'EEE']).
+
+printList([], pastCourses) :- !.
+printList([ShortName | Tail], pastCourses) :-
+    course(Code, ShortName, FullName, _, _, _, _), 
+    format('~w ~w ~w~n', [Code, ShortName, FullName]),
+    % write(Code), write(' '), write(ShortName), nl,
+    printList(Tail).
+
+
 
 % printReqdCourses([course(A, B, C, D, E, F, G)]) :-
     % member(cse, G).
 
 
-getCourses(SemType) :-
-    % get list of courses in the given semester
-    findall(C, course(_, C, _, _, _, L, _), L1),
+% getCourses(SemType) :-
+%     % get list of courses in the given semester
+%     findall(C, course(_, C, _, _, _, L, _), L1),
