@@ -1,4 +1,3 @@
-% check antireq
 % minors
 % adding new courses
 % deleting previous courses
@@ -9,15 +8,15 @@ start :-
     write('Enter the branch name (cse/ ece/ csai/ csam/ csb/ csss/ csd): '), nl,
     read(Branch),
     write('Enter the courses done in the previous semester: (type done to stop)'), nl,
-    take_input(TempVar),
-    suggestCoreCourses(SemType, Branch, TempVar), 
+    take_input(CoursesDone),
+    suggestCoreCourses(SemType, Branch, CoursesDone), 
     write('Enter the courses you have already decided to do in the current semester: (type done to stop)'), nl,
-    take_input(TempVar2),
-    combineList(TempVar, TempVar2, TempVar3),
-    write(TempVar3), nl,
+    take_input(CoursesDoing),
+    combineList(CoursesDone, CoursesDoing, AllCourses),
+    write(AllCourses), nl,
     write('Enter the department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
     read(DepName),
-    getCourses(SemType, DepName, TempVar, TempVar2).
+    getCourses(SemType, DepName, CoursesDone, CoursesDoing, AllCourses).
 
 combineList([],L,L) :- !.
 combineList([H|T],L,[H|Z]) :- 
@@ -36,9 +35,9 @@ printFullList([Head | Tail]) :-
     printFullList(Tail).
 
 
-getCourses(SemType, DepName, CoursesDone, CoursesDoing) :-
+getCourses(SemType, DepName, CoursesDone, CoursesDoing, AllCourses) :-
     findall(ShortName, course(_, ShortName, _, _, _, [SemType], [DepName]), L),
-    printListAfterRemovingAndCheckingPrereqs(L, CoursesDone, CoursesDoing).
+    printListAfterRemovingAndCheckingPrereqs(L, CoursesDone, CoursesDoing, AllCourses).
 
 % code to print only those elements which are present in list 1 but not in list 2
 printListAfterRemoving([], _) :- !.
@@ -49,24 +48,25 @@ printListAfterRemoving([ShortName | Tail], PastCourses) :-
     printListAfterRemoving(Tail, PastCourses);
     printListAfterRemoving(Tail, PastCourses).
 
-printListAfterRemovingAndCheckingPrereqs([], _, _) :- !.
+printListAfterRemovingAndCheckingPrereqs([], _, _, _) :- !.
 
-printListAfterRemovingAndCheckingPrereqs([ShortName | Tail], CoursesDone, CoursesDoing) :-
-    \+ member(ShortName, CoursesDone),
-    \+ member(ShortName, CoursesDoing),
-    course(Code, ShortName, FullName, Prereqs, _, _, _),
+printListAfterRemovingAndCheckingPrereqs([ShortName | Tail], CoursesDone, CoursesDoing, AllCourses) :-
+    \+ member(ShortName, AllCourses),
+    % \+ member(ShortName, CoursesDoing),
+    course(Code, ShortName, FullName, Prereqs, Antireqs, _, _),
     % foreach(member(Prereq, Prereqs), (course(Prereq, Code, _, _, _, _, _), format('~w ~w ~n', [Prereq, Code]))),
     foreach(member(Prereq, Prereqs), checkPrereq(Prereq, CoursesDone)),
+    % write('Prereqs satisfied'), nl,
+    foreach(member(Antireq, Antireqs), \+ checkAntireq(Antireq, AllCourses)),
     format('~w ~w ~w~n', [Code, ShortName, FullName]),
-    printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing);
-    printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing).
+    printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing, AllCourses);
+    printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing, AllCourses).
 
 suggestCoreCourses(SemType, Branch, PastCourses) :-
     core(Branch, CoreCourses),
     write('Core Courses to do are: '), nl,
     printListAfterRemovingAndCheckingSemesterAndPrereqs(CoreCourses, PastCourses, SemType).
     % printListAfterRemovingAndCheckingSemester(CoreCourses, PastCourses, SemType).
-
 
 printListAfterRemovingAndCheckingSemesterAndPrereqs([], _, _) :- 
     write('Congratulations, No More Core Courses to do!') , nl, !.
@@ -92,6 +92,11 @@ printListAfterRemovingAndCheckingSemester([ShortName | Tail], PastCourses, Semes
 
 checkPrereq(Prereq, PastCourses) :-
     course(Prereq, Code, _, _, _, _, _),
+    member(Code, PastCourses), !;
+    fail.
+
+checkAntireq(Antireq, PastCourses) :-
+    course(Antireq, Code, _, _, _, _, _),
     member(Code, PastCourses), !;
     fail.
 
@@ -170,8 +175,8 @@ course('CSE441/CSE541', 'BIOM', 'Advanced Biometrics', ['CSE343/CSE543/ECE563'],
 course('CSE577', 'AIOT', 'Advanced Internet of Things', [], [], [winter], [cse]).
 course('CSE631', 'AOS', 'Advanced Operating Systems', ['CSE231'], [], [winter], [cse]).
 course('CSE634', 'ATMC', 'Advanced Topics in Mobile Computing', ['CSE232'], [], [winter], [cse]).
-course('CSE222', 'ADA', 'Algorithm Design and Analysis', ['CSE102'], [], [winter], [cse]).
-course('CSE223', 'ALD', 'Algorithm Design and Analysis', ['CSE102'], [], [winter], [cse]).
+course('CSE222', 'ADA', 'Algorithm Design and Analysis', ['CSE102'], ['CSE223'], [winter], [cse]).
+course('CSE223', 'ALD', 'Algorithm Design and Analysis', ['CSE102'], ['CSE222'], [winter], [cse]).
 course('CSE529', 'AAG', 'Approximation Algorithms', ['CSE222'], [], [winter], [cse]).
 course('CSE557', 'BDA', 'Big Data Analytics	', ['CSE202'], [], [winter], [cse]).
 course('CSE636/ECE636', 'COMN', 'Communication Networks', ['MTH201'], [], [winter], [cse]).
