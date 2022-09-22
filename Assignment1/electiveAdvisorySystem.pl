@@ -1,3 +1,77 @@
+start :-
+    write('Elective Advisory System for IIITD Btech Students'), nl,
+    write('Enter the semester type (monsoon/winter): '), nl,
+    read(SemType),
+    write('Enter the branch name (cse/ ece/ csai/ csam/ csb/ csss/ csd): '), nl,
+    read(Branch),
+    write('Enter the courses done in the previous semester: (type done to stop)'), nl,
+    take_input(TempVar),
+    suggestCoreCourses(SemType, Branch, TempVar), 
+    write('Enter the department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
+    read(DepName),
+    getCourses(SemType, DepName, TempVar).
+
+take_input([Head | Tail]) :-
+    write('Enter the course name: '), nl,
+    read(Head),
+    (Head = done -> Tail = [] ; take_input(Tail)).
+
+printFullList([]) :- !.
+printFullList([done]) :- !.
+printFullList([Head | Tail]) :-
+    course(Code, Head, Name, _, _, _, _),
+    format('~w ~w ~w~n', [Code, Head, Name]),
+    printFullList(Tail).
+
+
+getCourses(SemType, DepName, CourseList) :-
+    findall(ShortName, course(_, ShortName, _, _, _, [SemType], [DepName]), L),
+    printListAfterRemoving(L, CourseList).
+
+% code to print only those elements which are present in list 1 but not in list 2
+printListAfterRemoving([], _) :- !.
+printListAfterRemoving([ShortName | Tail], PastCourses) :-
+    \+ member(ShortName, PastCourses),
+    course(Code, ShortName, FullName, _, _, _, _),
+    format('~w ~w ~w~n', [Code, ShortName, FullName]),
+    printListAfterRemoving(Tail, PastCourses);
+    printListAfterRemoving(Tail, PastCourses).
+
+suggestCoreCourses(SemType, Branch, PastCourses) :-
+    core(Branch, CoreCourses),
+    write('Core Courses to do are: '), nl,
+    printListAfterRemovingAndCheckingSemester(CoreCourses, PastCourses, SemType).
+
+% code to print only those elements which are present in list 1 but not in list 2
+printListAfterRemovingAndCheckingSemester([], _, _) :- 
+    write('Congratulations, No More Core Courses to do!') , nl, !.
+
+printListAfterRemovingAndCheckingSemester([ShortName | Tail], PastCourses, Semester) :-
+    \+ member(ShortName, PastCourses),
+    course(Code, ShortName, FullName, _, _, [Semester], _),
+    format('~w ~w ~w~n', [Code, ShortName, FullName]),
+    printListAfterRemovingAndCheckingSemester(Tail, PastCourses, Semester);
+    printListAfterRemovingAndCheckingSemester(Tail, PastCourses, Semester).
+
+% addReqdCourse(SemType, ShortName, PastCourses) :-
+%     course(_, ShortName, _, _, _, [SemType], _),
+%     \+ member(ShortName, PastCourses),
+
+
+checkCourse(ShortName, PastCourses) :-
+    \+ member(ShortName, PastCourses), 
+    write(ShortName), nl;
+    write('hi').
+
+% Core Courses
+core(cse, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'BE', 'P&S', 'CO', 'AP', 'OS', 'DM', 'DBMS', 'ADA', 'CN', 'EEE', 'TCOM']).
+core(ece, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'BE', 'P&S', 'CO', 'CTD', 'ELD', 'S&S', 'M-III', 'F&W', 'IE', 'PCS', 'M-IV', 'EEE', 'TCOM']).
+core(csam, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'BE', 'P&S', 'CO', 'RA-I', 'OS', 'DM', 'M-IV', 'ADA', 'AA-I', 'EEE', 'TOC', 'SPA', 'SI', 'TCOM']).
+core(csd, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'DDV', 'P&S', 'CO', 'VDC', 'AP', 'OS', 'DPP', 'RMSSD', 'DBMS', 'ADA', 'DIS', 'CN', 'EEE', 'TCOM']).
+core(csss, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'ISA', 'P&S', 'CO', 'CTRSS', 'OS', 'RMSSD', 'DM', 'AP', 'M-III', 'ADA', 'CO', 'DBMS', 'ECO', 'EEE', 'TCOM']).
+core(csb, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'BE', 'P&S', 'CO', 'FOB', 'AP', 'OS', 'M-III', 'CBBC', 'GMB', 'DBMS', 'ALD', 'CN', 'PB', 'IQB', 'ABIN', 'ACB', 'EEE', 'TCOM']).
+core(csai, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'IIS', 'P&S', 'AP', 'OS', 'M-III', 'DM', 'S&S', 'SML', 'ADA', 'ML', 'AI', 'EEE', 'TCOM', 'EI']).
+
 % CSE Courses
 course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [cse]).
 course('BIO546/CSE585', 'CM', 'Computing for Medicine', [], [], [monsoon], [cse]).
@@ -30,7 +104,6 @@ course('CSE525', 'GA', 'Introduction to Graduate Algorithms', ['CSE222'], [], [m
 course('CSE101', 'IP', 'Introduction to Programming', [], [], [monsoon], [cse]).
 course('CSE555', 'ISC', 'Introduction to Spatial Computing', ['CSE102', 'CSE202'], [], [monsoon], [cse]).
 course('CSE605A', 'KG', 'Knowledge Graphs in Practice', ['CSE508'], [], [monsoon], [cse]).
-course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [cse]).
 course('CSE535', 'MC', 'Mobile Computing', ['CSE101'], [], [monsoon], [cse]).
 course('CSE319/CSE519', 'MAD', 'Modern Algorithm Design', ['CSE222'], [], [monsoon], [cse]).
 course('CSE556', 'NLP', 'Natural Language Processing', ['CSE101', 'MTH201', 'CSE222', 'MTH100'], [], [monsoon], [cse]).
@@ -267,7 +340,6 @@ course('DES515', 'ISPR', 'Information Systems in Public Health', [], [], [monsoo
 course('DES516', 'I3DD', 'Introduction to 3D Production Design for Animation and Games', [], [], [monsoon], [des]).
 course('DES302', 'IAG', 'Introduction to Animation and Graphics', [], [], [monsoon], [des]).
 course('DES518', 'IMG', 'Introduction to Motion Graphics', [], [], [monsoon], [des]).
-course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [des]).
 course('DES130', 'PIS', 'Prototyping Interactive Systems', [], [], [monsoon], [des]).
 course('DES202', 'VDC', 'Visual Design & Communication', ['DES101'], [], [monsoon], [des]).
 course('DES513', 'WARDI', 'Wearable Applications, Research, Devices, Interactions', [], [], [monsoon], [des]).
@@ -371,42 +443,3 @@ course('ENT415', 'NVP', 'New Venture Planning', [], [], [winter], [oth]).
 course('ENT414', 'RIPS', 'Relevance of Intellectual Property for Startups', [], [], [winter], [oth]).
 course('ENG599s', 'RM', 'Research Methods', [], [], [winter], [oth]).
 
-start :-
-    write('Elective Advisory System for IIITD Btech Students'), nl,
-    write('Enter the semester type (monsoon/winter): '), nl,
-    read(SemType),
-    write('Enter the department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
-    read(DepName),
-    getCourses(SemType, DepName).
-
-sampleCourses(['COM', 'EEE']).
-
-% course(code, short form, full name, pre-reqs, anti-reqs, semester, department)
-
-% searchCourses :-
-    % course(_, C, _, _, _, L, _)
-
-getCourses(SemType, DepName) :-
-    % course(C, A, B, D, E, G, F).
-    findall(ShortName, course(_, ShortName, _, _, _, [SemType], [DepName]), L),
-    % printReqdCourses(L).
-    % write(L).
-    % printList(L).
-    printList(L, ['COM', 'EEE']).
-
-printList([], pastCourses) :- !.
-printList([ShortName | Tail], pastCourses) :-
-    course(Code, ShortName, FullName, _, _, _, _), 
-    format('~w ~w ~w~n', [Code, ShortName, FullName]),
-    % write(Code), write(' '), write(ShortName), nl,
-    printList(Tail).
-
-
-
-% printReqdCourses([course(A, B, C, D, E, F, G)]) :-
-    % member(cse, G).
-
-
-% getCourses(SemType) :-
-%     % get list of courses in the given semester
-%     findall(C, course(_, C, _, _, _, L, _), L1),
