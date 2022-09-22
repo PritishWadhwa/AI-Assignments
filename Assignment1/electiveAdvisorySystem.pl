@@ -1,4 +1,3 @@
-% minors
 % adding new courses
 % deleting previous courses
 start :-
@@ -10,6 +9,9 @@ start :-
     write('Enter the courses done in the previous semester: (type done to stop)'), nl,
     take_input(CoursesDone),
     suggestCoreCourses(SemType, Branch, CoursesDone), 
+    write('Do you want plan to do any minors? (eco: Economics, bio: Computational Biology, ent: Entrepreneurship, no: do not want to do any minors)'),
+    read(Minor),
+    suggestMinors(SemType, Minor, CoursesDone),
     write('Enter the courses you have already decided to do in the current semester: (type done to stop)'), nl,
     take_input(CoursesDoing),
     combineList(CoursesDone, CoursesDoing, AllCourses),
@@ -52,11 +54,8 @@ printListAfterRemovingAndCheckingPrereqs([], _, _, _) :- !.
 
 printListAfterRemovingAndCheckingPrereqs([ShortName | Tail], CoursesDone, CoursesDoing, AllCourses) :-
     \+ member(ShortName, AllCourses),
-    % \+ member(ShortName, CoursesDoing),
     course(Code, ShortName, FullName, Prereqs, Antireqs, _, _),
-    % foreach(member(Prereq, Prereqs), (course(Prereq, Code, _, _, _, _, _), format('~w ~w ~n', [Prereq, Code]))),
     foreach(member(Prereq, Prereqs), checkPrereq(Prereq, CoursesDone)),
-    % write('Prereqs satisfied'), nl,
     foreach(member(Antireq, Antireqs), \+ checkAntireq(Antireq, AllCourses)),
     format('~w ~w ~w~n', [Code, ShortName, FullName]),
     printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing, AllCourses);
@@ -66,7 +65,12 @@ suggestCoreCourses(SemType, Branch, PastCourses) :-
     core(Branch, CoreCourses),
     write('Core Courses to do are: '), nl,
     printListAfterRemovingAndCheckingSemesterAndPrereqs(CoreCourses, PastCourses, SemType).
-    % printListAfterRemovingAndCheckingSemester(CoreCourses, PastCourses, SemType).
+
+suggestMinors(SemType, Minor, PastCourses) :-
+    Minor \= no,
+    minors(Minor, MinorCourses),
+    write('Minor Courses to do are: '), nl,
+    printListAfterRemovingAndCheckingSemesterAndPrereqs(MinorCourses, PastCourses, SemType).
 
 printListAfterRemovingAndCheckingSemesterAndPrereqs([], _, _) :- 
     write('Congratulations, No More Core Courses to do!') , nl, !.
@@ -74,7 +78,6 @@ printListAfterRemovingAndCheckingSemesterAndPrereqs([], _, _) :-
 printListAfterRemovingAndCheckingSemesterAndPrereqs([ShortName | Tail], PastCourses, SemType) :-
     \+ member(ShortName, PastCourses),
     course(Code, ShortName, FullName, Prereqs, _, [SemType], _),
-    % foreach(member(Prereq, Prereqs), (course(Prereq, Code, _, _, _, _, _), format('~w ~w ~n', [Prereq, Code]))),
     foreach(member(Prereq, Prereqs), checkPrereq(Prereq, PastCourses)),
     format('~w ~w ~w~n', [Code, ShortName, FullName]),
     printListAfterRemovingAndCheckingSemesterAndPrereqs(Tail, PastCourses, SemType);
@@ -108,6 +111,10 @@ core(csd, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'DDV', 'P&S', 'CO', 'VDC', 'A
 core(csss, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'ISA', 'P&S', 'CO', 'CTRSS', 'OS', 'RMSSD', 'DM', 'AP', 'M-III', 'ADA', 'CO', 'DBMS', 'ECO', 'EEE', 'TCOM']).
 core(csb, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'BE', 'P&S', 'CO', 'FOB', 'AP', 'OS', 'M-III', 'CBBC', 'GMB', 'DBMS', 'ALD', 'CN', 'PB', 'IQB', 'ABIN', 'ACB', 'EEE', 'TCOM']).
 core(csai, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'IIS', 'P&S', 'AP', 'OS', 'M-III', 'DM', 'S&S', 'SML', 'ADA', 'ML', 'AI', 'EEE', 'TCOM', 'EI']).
+
+minors(eco, ['ME', 'GMT', 'ECO', 'P&S']).
+minors(bio, ['IQB']).
+minors(ent, ['EK', 'NVP', 'EComm']).
 
 % CSE Courses
 course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [cse]).
