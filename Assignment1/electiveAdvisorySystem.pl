@@ -1,3 +1,7 @@
+% check antireq
+% minors
+% adding new courses
+% deleting previous courses
 start :-
     write('Elective Advisory System for IIITD Btech Students'), nl,
     write('Enter the semester type (monsoon/winter): '), nl,
@@ -7,9 +11,17 @@ start :-
     write('Enter the courses done in the previous semester: (type done to stop)'), nl,
     take_input(TempVar),
     suggestCoreCourses(SemType, Branch, TempVar), 
+    write('Enter the courses you have already decided to do in the current semester: (type done to stop)'), nl,
+    take_input(TempVar2),
+    combineList(TempVar, TempVar2, TempVar3),
+    write(TempVar3), nl,
     write('Enter the department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
     read(DepName),
-    getCourses(SemType, DepName, TempVar).
+    getCourses(SemType, DepName, TempVar, TempVar2).
+
+combineList([],L,L) :- !.
+combineList([H|T],L,[H|Z]) :- 
+    combineList(T,L,Z).
 
 take_input([Head | Tail]) :-
     write('Enter the course name: '), nl,
@@ -24,9 +36,9 @@ printFullList([Head | Tail]) :-
     printFullList(Tail).
 
 
-getCourses(SemType, DepName, CourseList) :-
+getCourses(SemType, DepName, CoursesDone, CoursesDoing) :-
     findall(ShortName, course(_, ShortName, _, _, _, [SemType], [DepName]), L),
-    printListAfterRemoving(L, CourseList).
+    printListAfterRemovingAndCheckingPrereqs(L, CoursesDone, CoursesDoing).
 
 % code to print only those elements which are present in list 1 but not in list 2
 printListAfterRemoving([], _) :- !.
@@ -37,12 +49,37 @@ printListAfterRemoving([ShortName | Tail], PastCourses) :-
     printListAfterRemoving(Tail, PastCourses);
     printListAfterRemoving(Tail, PastCourses).
 
+printListAfterRemovingAndCheckingPrereqs([], _, _) :- !.
+
+printListAfterRemovingAndCheckingPrereqs([ShortName | Tail], CoursesDone, CoursesDoing) :-
+    \+ member(ShortName, CoursesDone),
+    \+ member(ShortName, CoursesDoing),
+    course(Code, ShortName, FullName, Prereqs, _, _, _),
+    % foreach(member(Prereq, Prereqs), (course(Prereq, Code, _, _, _, _, _), format('~w ~w ~n', [Prereq, Code]))),
+    foreach(member(Prereq, Prereqs), checkPrereq(Prereq, CoursesDone)),
+    format('~w ~w ~w~n', [Code, ShortName, FullName]),
+    printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing);
+    printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing).
+
 suggestCoreCourses(SemType, Branch, PastCourses) :-
     core(Branch, CoreCourses),
     write('Core Courses to do are: '), nl,
-    printListAfterRemovingAndCheckingSemester(CoreCourses, PastCourses, SemType).
+    printListAfterRemovingAndCheckingSemesterAndPrereqs(CoreCourses, PastCourses, SemType).
+    % printListAfterRemovingAndCheckingSemester(CoreCourses, PastCourses, SemType).
 
-% code to print only those elements which are present in list 1 but not in list 2
+
+printListAfterRemovingAndCheckingSemesterAndPrereqs([], _, _) :- 
+    write('Congratulations, No More Core Courses to do!') , nl, !.
+
+printListAfterRemovingAndCheckingSemesterAndPrereqs([ShortName | Tail], PastCourses, SemType) :-
+    \+ member(ShortName, PastCourses),
+    course(Code, ShortName, FullName, Prereqs, _, [SemType], _),
+    % foreach(member(Prereq, Prereqs), (course(Prereq, Code, _, _, _, _, _), format('~w ~w ~n', [Prereq, Code]))),
+    foreach(member(Prereq, Prereqs), checkPrereq(Prereq, PastCourses)),
+    format('~w ~w ~w~n', [Code, ShortName, FullName]),
+    printListAfterRemovingAndCheckingSemesterAndPrereqs(Tail, PastCourses, SemType);
+    printListAfterRemovingAndCheckingSemesterAndPrereqs(Tail, PastCourses, SemType).
+
 printListAfterRemovingAndCheckingSemester([], _, _) :- 
     write('Congratulations, No More Core Courses to do!') , nl, !.
 
@@ -53,15 +90,10 @@ printListAfterRemovingAndCheckingSemester([ShortName | Tail], PastCourses, Semes
     printListAfterRemovingAndCheckingSemester(Tail, PastCourses, Semester);
     printListAfterRemovingAndCheckingSemester(Tail, PastCourses, Semester).
 
-% addReqdCourse(SemType, ShortName, PastCourses) :-
-%     course(_, ShortName, _, _, _, [SemType], _),
-%     \+ member(ShortName, PastCourses),
-
-
-checkCourse(ShortName, PastCourses) :-
-    \+ member(ShortName, PastCourses), 
-    write(ShortName), nl;
-    write('hi').
+checkPrereq(Prereq, PastCourses) :-
+    course(Prereq, Code, _, _, _, _, _),
+    member(Code, PastCourses), !;
+    fail.
 
 % Core Courses
 core(cse, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'BE', 'P&S', 'CO', 'AP', 'OS', 'DM', 'DBMS', 'ADA', 'CN', 'EEE', 'TCOM']).
