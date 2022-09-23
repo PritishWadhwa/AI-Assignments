@@ -1,17 +1,28 @@
-% adding new courses
-% deleting previous courses
+% career preference
+
+:- dynamic(course/7).
+
 start :-
     write('Elective Advisory System for IIITD Btech Students'), nl,
     write('Enter the semester type (monsoon/winter): '), nl,
     read(SemType),
     write('Enter the branch name (cse/ ece/ csai/ csam/ csb/ csss/ csd): '), nl,
     read(Branch),
+    write('Are there new courses you want to add? (y/n): '), nl,
+    read(Add),
+    addCourse(Add),
+    write('Are there courses you want to delete? (y/n): '), nl,
+    read(Delete),
+    deleteCourse(Delete),
     write('Enter the courses done in the previous semester: (type done to stop)'), nl,
     take_input(CoursesDone),
     suggestCoreCourses(SemType, Branch, CoursesDone), 
     write('Do you want plan to do any minors? (eco: Economics, bio: Computational Biology, ent: Entrepreneurship, no: do not want to do any minors)'),
     read(Minor),
     suggestMinors(SemType, Minor, CoursesDone),
+    write('Do you want career specific courses? (y/n)'),
+    read(Career),
+    suggestCareerCourses(Career, CoursesDone, SemType),
     write('Enter the courses you have already decided to do in the current semester: (type done to stop)'), nl,
     take_input(CoursesDoing),
     combineList(CoursesDone, CoursesDoing, AllCourses),
@@ -19,6 +30,54 @@ start :-
     write('Enter the department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
     read(DepName),
     getCourses(SemType, DepName, CoursesDone, CoursesDoing, AllCourses).
+
+suggestCareerCourses(n, _, _) :- !.
+
+suggestCareerCourses(y, CoursesDone, SemType) :-
+    write('Enter the career preference (ml: Machine Learning/ Data Science)'), nl,
+    read(CareerPref),
+    career(CareerPref, Courses),
+    write('Suggested courses for your career preference: '), nl,
+    printListAfterRemovingAndCheckingSemesterAndPrereqs(Courses, CoursesDone, SemType).
+
+deleteCourse(n) :- !.
+
+deleteCourse(y) :-
+    write('Enter the course abbreviation to delete: '), nl,
+    read(CourseAbbr),
+    retract(course(_, CourseAbbr, _, _, _, _, _)),
+    write('Do you want to delete more courses? (y/n): '), nl,
+    read(Delete),
+    deleteCourse(Delete).
+
+addCourse(n) :- !.
+
+addCourse(y) :-
+    % course('CSE344/CSE544/ECE344/ECE544', 'CV', 'Computer Vision', ['MTH100'], [], [winter], [cse]).
+    write('Enter the course code: '), nl,
+    read(CourseCode),
+    write('Enter the course abbreviation: '), nl,
+    read(CourseAbbr),
+    write('Enter the course name: '), nl,
+    read(CourseName),
+    write('Enter the pre-requisites: (done to stop)'), nl,
+    take_input(PreReqs),
+    remover(done, PreReqs, PreReqs1),
+    write('Enter the anti-requisites: (done to stop)'), nl,
+    take_input(AntiReqs),
+    remover(done, AntiReqs, AntiReqs1),
+    write('Enter the course department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
+    read(DepName),
+    write('Enter the course semester type (monsoon/winter): '), nl,
+    read(SemType),
+    assert(course(CourseCode, CourseAbbr, CourseName, PreReqs1, AntiReqs1, [SemType], [DepName])),
+    write('Are there new courses you want to add? (y/n): '), nl,
+    read(Add),
+    addCourse(Add).
+
+remover( _, [], []).
+remover( R, [R|T], T2) :- remover( R, T, T2).
+remover( R, [H|T], [H|T2]) :- H \= R, remover( R, T, T2).
 
 combineList([],L,L) :- !.
 combineList([H|T],L,[H|Z]) :- 
@@ -65,6 +124,8 @@ suggestCoreCourses(SemType, Branch, PastCourses) :-
     core(Branch, CoreCourses),
     write('Core Courses to do are: '), nl,
     printListAfterRemovingAndCheckingSemesterAndPrereqs(CoreCourses, PastCourses, SemType).
+
+suggestMinors(Semtype, no, PastCourses) :- !.
 
 suggestMinors(SemType, Minor, PastCourses) :-
     Minor \= no,
@@ -115,6 +176,9 @@ core(csai, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'IIS', 'P&S', 'AP', 'OS', 'M
 minors(eco, ['ME', 'GMT', 'ECO', 'P&S']).
 minors(bio, ['IQB']).
 minors(ent, ['EK', 'NVP', 'EComm']).
+
+career(ml, ['P&S', 'ML', 'M-I', 'M-III', 'CV', 'SML', 'NLP', 'DL', 'AI', 'DMG', 'CF']).
+
 
 % CSE Courses
 course('CSE566/DES5MMS', 'MMS', 'Mobile and Middleware Systems', ['CSE535'], [], [monsoon], [cse]).
