@@ -1,5 +1,4 @@
-% career preference
-
+% making sure that the user can add new courses and remove old courses from the offerings
 :- dynamic(course/7).
 
 start :-
@@ -26,20 +25,22 @@ start :-
     write('Enter the courses you have already decided to do in the current semester: (type done to stop)'), nl,
     take_input(CoursesDoing),
     combineList(CoursesDone, CoursesDoing, AllCourses),
-    write(AllCourses), nl,
     write('Enter the department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
     read(DepName),
     getCourses(SemType, DepName, CoursesDone, CoursesDoing, AllCourses).
 
+% If the user does not want courses related to career advice
 suggestCareerCourses(n, _, _) :- !.
 
+% suggesting courses to the user relating to his/her choice of careers
 suggestCareerCourses(y, CoursesDone, SemType) :-
-    write('Enter the career preference (ml: Machine Learning/ Data Science)'), nl,
+    write('Enter the career preference (ml: Machine Learning/ Data Science, bd: Big Data, sec: Security Related): '), nl,
     read(CareerPref),
     career(CareerPref, Courses),
     write('Suggested courses for your career preference: '), nl,
     printListAfterRemovingAndCheckingSemesterAndPrereqs(Courses, CoursesDone, SemType).
 
+% Deleting the courses as required by the user
 deleteCourse(n) :- !.
 
 deleteCourse(y) :-
@@ -50,10 +51,10 @@ deleteCourse(y) :-
     read(Delete),
     deleteCourse(Delete).
 
+% Adding new courses as defined by the user
 addCourse(n) :- !.
 
 addCourse(y) :-
-    % course('CSE344/CSE544/ECE344/ECE544', 'CV', 'Computer Vision', ['MTH100'], [], [winter], [cse]).
     write('Enter the course code: '), nl,
     read(CourseCode),
     write('Enter the course abbreviation: '), nl,
@@ -75,19 +76,23 @@ addCourse(y) :-
     read(Add),
     addCourse(Add).
 
+% Function to remove all occurance of a given element from the given list
 remover( _, [], []).
 remover( R, [R|T], T2) :- remover( R, T, T2).
 remover( R, [H|T], [H|T2]) :- H \= R, remover( R, T, T2).
 
+% Function to combine two given list
 combineList([],L,L) :- !.
 combineList([H|T],L,[H|Z]) :- 
     combineList(T,L,Z).
 
+% Taking courses input from the user and storing them in a list
 take_input([Head | Tail]) :-
     write('Enter the course name: '), nl,
     read(Head),
     (Head = done -> Tail = [] ; take_input(Tail)).
 
+% Code to print Course code, Course Abbreviation, Course Name for each course present in the list
 printFullList([]) :- !.
 printFullList([done]) :- !.
 printFullList([Head | Tail]) :-
@@ -95,7 +100,7 @@ printFullList([Head | Tail]) :-
     format('~w ~w ~w~n', [Code, Head, Name]),
     printFullList(Tail).
 
-
+% Function to predict electives for a given department and semester type
 getCourses(SemType, DepName, CoursesDone, CoursesDoing, AllCourses) :-
     findall(ShortName, course(_, ShortName, _, _, _, [SemType], [DepName]), L),
     printListAfterRemovingAndCheckingPrereqs(L, CoursesDone, CoursesDoing, AllCourses).
@@ -109,6 +114,7 @@ printListAfterRemoving([ShortName | Tail], PastCourses) :-
     printListAfterRemoving(Tail, PastCourses);
     printListAfterRemoving(Tail, PastCourses).
 
+% code to print the courses list after checking the course prereqs
 printListAfterRemovingAndCheckingPrereqs([], _, _, _) :- !.
 
 printListAfterRemovingAndCheckingPrereqs([ShortName | Tail], CoursesDone, CoursesDoing, AllCourses) :-
@@ -120,12 +126,14 @@ printListAfterRemovingAndCheckingPrereqs([ShortName | Tail], CoursesDone, Course
     printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing, AllCourses);
     printListAfterRemovingAndCheckingPrereqs(Tail, CoursesDone, CoursesDoing, AllCourses).
 
+% code to suggest the core courses
 suggestCoreCourses(SemType, Branch, PastCourses) :-
     core(Branch, CoreCourses),
     write('Core Courses to do are: '), nl,
     printListAfterRemovingAndCheckingSemesterAndPrereqs(CoreCourses, PastCourses, SemType).
 
-suggestMinors(Semtype, no, PastCourses) :- !.
+% code to suggest the minors
+suggestMinors(_, no, _) :- !.
 
 suggestMinors(SemType, Minor, PastCourses) :-
     Minor \= no,
@@ -133,6 +141,7 @@ suggestMinors(SemType, Minor, PastCourses) :-
     write('Minor Courses to do are: '), nl,
     printListAfterRemovingAndCheckingSemesterAndPrereqs(MinorCourses, PastCourses, SemType).
 
+% code to suggest the courses after checking for antireqs
 printListAfterRemovingAndCheckingSemesterAndPrereqs([], _, _) :- 
     write('Congratulations, No More Core Courses to do!') , nl, !.
 
@@ -144,6 +153,7 @@ printListAfterRemovingAndCheckingSemesterAndPrereqs([ShortName | Tail], PastCour
     printListAfterRemovingAndCheckingSemesterAndPrereqs(Tail, PastCourses, SemType);
     printListAfterRemovingAndCheckingSemesterAndPrereqs(Tail, PastCourses, SemType).
 
+% code to print the courses list after checking the semester the course is offered in
 printListAfterRemovingAndCheckingSemester([], _, _) :- 
     write('Congratulations, No More Core Courses to do!') , nl, !.
 
@@ -154,11 +164,13 @@ printListAfterRemovingAndCheckingSemester([ShortName | Tail], PastCourses, Semes
     printListAfterRemovingAndCheckingSemester(Tail, PastCourses, Semester);
     printListAfterRemovingAndCheckingSemester(Tail, PastCourses, Semester).
 
+% code to check if the prereq of a given course is done or not
 checkPrereq(Prereq, PastCourses) :-
     course(Prereq, Code, _, _, _, _, _),
     member(Code, PastCourses), !;
     fail.
 
+% code to check if the antireq of a given course is done or not
 checkAntireq(Antireq, PastCourses) :-
     course(Antireq, Code, _, _, _, _, _),
     member(Code, PastCourses), !;
@@ -173,11 +185,15 @@ core(csss, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'ISA', 'P&S', 'CO', 'CTRSS',
 core(csb, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'BE', 'P&S', 'CO', 'FOB', 'AP', 'OS', 'M-III', 'CBBC', 'GMB', 'DBMS', 'ALD', 'CN', 'PB', 'IQB', 'ABIN', 'ACB', 'EEE', 'TCOM']).
 core(csai, ['IP', 'DC', 'M-I', 'PIS', 'COM', 'DSA', 'IIS', 'P&S', 'AP', 'OS', 'M-III', 'DM', 'S&S', 'SML', 'ADA', 'ML', 'AI', 'EEE', 'TCOM', 'EI']).
 
+% Mandatory courses to be done for minors
 minors(eco, ['ME', 'GMT', 'ECO', 'P&S']).
 minors(bio, ['IQB']).
 minors(ent, ['EK', 'NVP', 'EComm']).
 
-career(ml, ['P&S', 'ML', 'M-I', 'M-III', 'CV', 'SML', 'NLP', 'DL', 'AI', 'DMG', 'CF']).
+% Courses to be done for specific career paths
+career(ml, ['P&S', 'ML', 'M-I', 'M-III', 'CV', 'SML', 'NLP', 'DL', 'AI', 'DMG', 'CF', 'AML']).
+career(db, ['DBMS', 'IIA', 'SWeb', 'IR', 'DMG', 'DBSI', 'ISC', 'BDA', 'DW']).
+career(sec, ['CN', 'DSCD', 'SDN', 'ATMC', 'NSS-II', 'PN', 'WN', 'OS', 'FCS', 'TAC', 'SE', 'MS', 'PSOSM', 'NSC']).
 
 
 % CSE Courses
