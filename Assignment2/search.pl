@@ -11,7 +11,7 @@ start :-
     write('Search system from place A to place B'), nl,
     write('Enter the start place: '),
     enterPlace(Start),
-    write('Enter the goal place: '),
+    write('Enter the target place: '),
     enterPlace(Goal),
     write('Enter your choice of Algorithm (dfs(depth-first)/bfs(best-first)): '), read(Algorithm),
     solve(Start, Goal, Algorithm, Solution),
@@ -22,7 +22,7 @@ start :-
 
 enterPlace(Place) :-
     read(Place), 
-    graph(Place,_,_) -> true; (write('Place not found, enter new Place: '), enterPlace(Place)).
+    graph(Place, _, _) -> true; (write('Place not found, enter new Place: '), enterPlace(Place)).
 
 solve(Start, Goal, dfs, Solution) :-
     assert(goal(Goal)),
