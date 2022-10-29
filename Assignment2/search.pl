@@ -20,6 +20,28 @@ start :-
     getCost(Sol, Cost),
     write('Total Lenght: '), write(Cost), write(' kms').
 
+checkHeuristic :-
+    write('hi'),
+    forall(
+        heuristics(X,Y,Z), 
+        (
+            solve(X,Y,bfs,Solution),
+            reverse(Solution, Sol),
+            % printList(Sol), nl,
+            getCost(Sol, Cost),
+            % write('Total Lenght: '), write(Cost), write(' kms'), nl,
+            % write('Total Heuristics: '), write(Z), nl
+            % check if z >= cost
+            % if not, write error
+            % if yes, do nothing
+            (Z < Cost -> true; (write(X), write(' '), write(Y), write(' '), write(Z), write(' '), write(Cost), nl))
+            % (Z >= Cost -> write('') ; (write(X), write(' '), write(Y), write(' '), write(Z), write(' '), write(Cost), nl))
+            % Z >= Cost -> true; (write(X), write(' '), write(Y), write(' '), write(Z), write(' '), write(Cost), nl)
+        )
+    ).
+    
+    % heuristics(X,Y,_), write(X), write(Y).
+
 enterPlace(Place) :-
     read(Place), 
     graph(Place, _, _) -> true; (write('Place not found, enter new Place: '), enterPlace(Place)).
@@ -58,7 +80,15 @@ readHeuristics :-
             case(down)
         ]
     ),
-    maplist(assert, Rows).
+    maplist(assert, Rows),
+    forall(
+        heuristics(X,Y,Z), 
+        (
+            K is Z//4,
+            assert(heuristics(X,Y,K)),
+            retract(heuristics(X,Y,Z))
+        )
+    ).
 
 solveBestFirst(Start, Goal, Solution) :-
     bestFirst([[Start]], Goal, Solution, _).
