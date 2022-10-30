@@ -1,60 +1,74 @@
+% Programmer: Pritish Wadhwa 
+
+% importing the required library for reading csv file
 :- use_module(library(csv)).
+
+% Declaring the dynamic predicates
 :- dynamic(goal/1).
 :- dynamic(graph/3).
 :- dynamic(heuristics/3).
 
 start :-
+    % Retracting the already existing facts
     retractall(graph(_,_,_)),
     retractall(heuristics(_,_,_)),
+
+    % Reading the csv file and storing the facts in the database
     readHeuristics,
     readRoadData,
+
+    % Reading the start and goal nodes from the user
     write('Search system from place A to place B'), nl,
     write('Enter the start place: '),
     enterPlace(Start),
     write('Enter the target place: '),
     enterPlace(Goal),
+
+    % Reading the algorithm to be used from the user
     write('Enter your choice of Algorithm (dfs(depth-first)/bfs(best-first)): '), read(Algorithm),
+    
+    % solving the problem using the algorithm selected by the user
     solve(Start, Goal, Algorithm, Solution),
+
+    % printing the solution
     reverse(Solution, Sol),
     printList(Sol), nl,
+
+    % calculating the total distance travelled
     getCost(Sol, Cost),
     write('Total Lenght: '), write(Cost), write(' kms').
 
 checkHeuristic :-
-    write('hi'),
+    % checking if the heuristics are valid or not
     forall(
         heuristics(X,Y,Z), 
         (
             solve(X,Y,bfs,Solution),
             reverse(Solution, Sol),
-            % printList(Sol), nl,
             getCost(Sol, Cost),
-            % write('Total Lenght: '), write(Cost), write(' kms'), nl,
-            % write('Total Heuristics: '), write(Z), nl
-            % check if z >= cost
-            % if not, write error
-            % if yes, do nothing
             (Z < Cost -> true; (write(X), write(' '), write(Y), write(' '), write(Z), write(' '), write(Cost), nl))
-            % (Z >= Cost -> write('') ; (write(X), write(' '), write(Y), write(' '), write(Z), write(' '), write(Cost), nl))
-            % Z >= Cost -> true; (write(X), write(' '), write(Y), write(' '), write(Z), write(' '), write(Cost), nl)
         )
     ).
-    
-    % heuristics(X,Y,_), write(X), write(Y).
+
 
 enterPlace(Place) :-
+    % reading the place from the user
     read(Place), 
     graph(Place, _, _) -> true; (write('Place not found, enter new Place: '), enterPlace(Place)).
 
+
 solve(Start, Goal, dfs, Solution) :-
+    % solving the problem using dfs
     assert(goal(Goal)),
     solveDFS(Start, Solution),
     retract(goal(Goal)).
 
 solve(Start, Goal, bfs, Solution) :-
+    % solving the problem using bfs
     solveBestFirst(Start, Goal, Solution).
 
 solve(_, _, _, _) :-
+    % if the algorithm is not valid
     write('Invalid Algorithm! Try again.'), nl, 
     start, 
     !.
@@ -62,6 +76,7 @@ solve(_, _, _, _) :-
 getCost([_], 0) :- !.
 
 getCost([H|T], Cost) :-
+    % calculating the total distance travelled
     T = [HT|_],
     graph(H, HT, C),
     getCost(T, Cost1),
@@ -69,6 +84,7 @@ getCost([H|T], Cost) :-
     Cost is Cost1 + C.
 
 readHeuristics :- 
+    % reading the heuristics from the csv file and storing them as facts
     csv_read_file(
         './data/heuristics.csv', 
         Rows, 
@@ -90,12 +106,15 @@ readHeuristics :-
         )
     ).
 
+
 solveBestFirst(Start, Goal, Solution) :-
+    % solving the problem using best first search
     bestFirst([[Start]], Goal, Solution, _).
 
 bestFirst([[Goal|Path]|_], Goal, [Goal|Path], 0) :- !.
 
 bestFirst([Path|Queue], Goal, FinalPath, N) :-
+    % expanding the node with the least heuristic value
     Path = [H|T],
     findall(
         [X, H|T],
@@ -111,6 +130,7 @@ bestFirst([Path|Queue], Goal, FinalPath, N) :-
     N is M+1.
 
 extend([Node|Path], NewPaths) :-
+    % extending the node with all the possible paths from it 
     findall(
         [NewNode, Node|Path],
         (
@@ -121,6 +141,7 @@ extend([Node|Path], NewPaths) :-
     ).
 
 sortQueueByHeuristicValue(Initial, Final, Target) :-
+    % sorting the queue by the heuristic value
     swapBasedOnHeuristicValue(Initial, Swapped, Target),
     !,
     sortQueueByHeuristicValue(Swapped, Final, Target).
@@ -128,6 +149,7 @@ sortQueueByHeuristicValue(Initial, Final, Target) :-
 sortQueueByHeuristicValue(Initial, Initial, _) :- !.
 
 swapBasedOnHeuristicValue(Initial, Swapped, Target) :-
+    % swapping the nodes in the queue based on the heuristic value
     Initial = [[H1|T1], [H2|T2]|T],
     Swapped = [[H2|T2], [H1|T1]|T],
     heuristics(H1, Target, H1Value),
@@ -137,9 +159,11 @@ swapBasedOnHeuristicValue(Initial, Swapped, Target) :-
     H1Value > H2Value.
 
 swapBasedOnHeuristicValue([H|T1], [H|T2], Target) :-
+    % swapping the nodes in the queue based on the heuristic value
     swapBasedOnHeuristicValue(T1, T2, Target).
 
 readRoadData :-
+    % reading the road data from the csv file and storing them as facts
     csv_read_file(
         './data/dist1.csv', 
         Data, 
@@ -154,6 +178,7 @@ readRoadData :-
     
 
 generateGraph(Data) :-
+    % generating the graph from the road data
     Data = [Header | Rows],
     forall(
         member(Row, Rows), 
@@ -163,6 +188,7 @@ generateGraph(Data) :-
     ).
 
 addEdge(Header, Row):-
+    % adding the edge to the graph
     arg(1, Row, RowName),
     functor(Header, _, Arity),
     forall(
@@ -181,23 +207,28 @@ addEdge(Header, Row):-
     ).
 
 solveDFS(Start, Solution) :-
+    % solving the problem using dfs
     dfs([], Start, Solution).
 
 dfs(Path, Node, [Node|Path]) :-
+    % checking if the goal is reached
     goal(Node).
 
 dfs(Path, Node, Sol) :-
+    % expanding the node with all the possible paths from it
     graph(Node, Node1, _),
     not(member(Node1, Path)),
     dfs([Node|Path], Node1, Sol).
 
 reverseList([Head | Tail], L) :-
+    % reversing the list
     reverseList(Tail, L),
     L = [Head | L].
 
 reverseList([], _) :- !.
 
 printList([Head | Tail]) :- 
+    % printing the list
     length(Tail, 0) -> 
         write(Head); 
         (
@@ -207,6 +238,7 @@ printList([Head | Tail]) :-
         ).
 
 printList([Head]) :-
+    % printing the list
     writeln(Head).
 
 printList([]) :- !. 
