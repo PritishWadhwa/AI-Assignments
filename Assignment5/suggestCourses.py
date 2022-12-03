@@ -1,3 +1,8 @@
+import os
+
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+
 from pyswip import Prolog
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
@@ -5,23 +10,9 @@ from nltk import pos_tag
 from nltk.sentiment import SentimentIntensityAnalyzer
 
 sia = SentimentIntensityAnalyzer()
+sw = set(stopwords.words("english"))
 
-# import spacy
-
-# nlp = spacy.load("en_core_web_sm")
-# sw_spacy = nlp.Defaults.stop_words
-
-sw = set(stopwords.words('english'))
-
-def formatLists(l):
-    ans = '['
-    if len(l) != 0:
-        ans += l[0]
-        for i in range(1, len(l)):
-            ans += (',' + l[i])
-    return ans + ']'
-
-with open("input.txt", mode = "r", encoding = "utf-8") as file:
+with open("input.txt", mode="r", encoding="utf-8") as file:
     text = file.read()
 
 # text = text.lower()
@@ -116,6 +107,18 @@ else:
 print(career)
 
 
+# Getting new course domain
+currSent = sents[6]
+currSent = currSent.lower()
+words = word_tokenize(currSent)
+words = [word for word in words if word not in sw]
+tagged = pos_tag(words)
+for word, tag in tagged:
+    if tag == "VBP" or tag == "VBZ" or tag == "DT":
+        domain = word
+        break
+
+print(domain)
 
 # # Getting previous courses
 # currSent = sents[4]
@@ -131,17 +134,30 @@ print(career)
 
 
 # for token in tokens:
-	# print(token, token.pos_)
-	# if (token.pos_ == "PROPN"):
-		# branch = token.text
+# print(token, token.pos_)
+# if (token.pos_ == "PROPN"):
+# branch = token.text
 
 
-swipl = Prolog() 
-swipl.consult('./electiveAdvisorySystem.pl')
-courses = list(swipl.query('start(%s, %s, %s, %s, %s, %s)' % (semester, branch, addNewCourses, deleteCourses, minor, career)))
+swipl = Prolog()
+swipl.consult("./electiveAdvisorySystem.pl")
+ans = list(
+    swipl.query(
+        "start(%s, %s, %s, %s, %s, %s, %s)"
+        % (semester, branch, addNewCourses, deleteCourses, minor, career, domain)
+    )
+)
+# ans = list(swipl.query("start"))
+
+
+# print(ans)
+
+# for i in ans:
+# print(i)
+# break
+# break
 
 
 # print(courses)
 
 # print("working")
-

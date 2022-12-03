@@ -1,33 +1,20 @@
 % making sure that the user can add new courses and remove old courses from the offerings
 :- dynamic(course/7).
 
-start(SemType, Branch, Add, Delete, Minor, Career) :-
+start(SemType, Branch, Add, Delete, Minor, Career, DepName) :-
+% start :-
     write('Elective Advisory System for IIITD Btech Students'), nl,
-    % write('Enter the semester type (monsoon/winter): '), nl,
-    % read(SemType),
-    % write('Enter the branch name (cse/ ece/ csai/ csam/ csb/ csss/ csd): '), nl,
-    % read(Branch),
-    % write('Are there new courses you want to add? (y/n): '), nl,
-    % read(Add),
     addCourse(Add),
-    % write('Are there courses you want to delete? (y/n): '), nl,
-    % read(Delete),
-    deleteCourse(Delete),
+    deleteCourse(Delete), 
     write('Enter the courses done in the previous semester: (type done to stop)'), nl,
     take_input(CoursesDone),
-    suggestCoreCourses(SemType, Branch, CoursesDone), 
-    % write('Do you want plan to do any minors? (eco: Economics, bio: Computational Biology, ent: Entrepreneurship, no: do not want to do any minors)'),
-    % read(Minor),
+    suggestCoreCourses(SemType, Branch, CoursesDone),
     suggestMinors(SemType, Minor, CoursesDone),
-    % write('Do you want career specific courses? (y/n)'),
-    % read(Career),
     suggestCareerCourses(Career, CoursesDone, SemType),
     write('Enter the courses you have already decided to do in the current semester: (type done to stop)'), nl,
     take_input(CoursesDoing),
     combineList(CoursesDone, CoursesDoing, AllCourses),
-    write('Enter the department name (cse/ece/mth/bio/des/ssh/oth): '), nl,
-    read(DepName),
-    getCourses(SemType, DepName, CoursesDone, CoursesDoing, AllCourses).
+    getCourses(SemType, DepName, CoursesDone, CoursesDoing, AllCourses), !.
 
 % If the user does not want courses related to career advice
 suggestCareerCourses(n, _, _) :- !.
