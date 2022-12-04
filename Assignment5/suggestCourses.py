@@ -15,7 +15,6 @@ sw = set(stopwords.words("english"))
 with open("input.txt", mode="r", encoding="utf-8") as file:
     text = file.read()
 
-# text = text.lower()
 
 sents = sent_tokenize(text)
 
@@ -31,7 +30,6 @@ for word, tag in tagged:
     if tag == "VBP":
         semester = word
         break
-print(semester)
 
 # Finding the Branch
 currSent = sents[1]
@@ -46,8 +44,6 @@ for word, tag in tagged:
         branch = word
         break
 
-print(branch)
-
 # Adding new courses
 currSent = sents[2]
 currSent = currSent.lower()
@@ -56,9 +52,6 @@ if polarityScores["neg"] > polarityScores["pos"]:
     addNewCourses = "n"
 else:
     addNewCourses = "y"
-
-print(addNewCourses)
-
 
 # Deleting courses
 currSent = sents[3]
@@ -69,14 +62,10 @@ if polarityScores["neg"] > polarityScores["pos"]:
 else:
     deleteCourses = "y"
 
-print(deleteCourses)
-
-
 # Getting the details of minors
 currSent = sents[4]
 currSent = currSent.lower()
 polarityScores = sia.polarity_scores(currSent)
-# print(currSent, polarityScores)
 if polarityScores["neg"] > polarityScores["pos"]:
     minor = "no"
 else:
@@ -88,12 +77,10 @@ else:
             minor = word
             break
 
-
 # Getting career specific courses
 currSent = sents[5]
 currSent = currSent.lower()
 polarityScores = sia.polarity_scores(currSent)
-print(currSent, polarityScores)
 if polarityScores["neg"] > polarityScores["pos"]:
     career = "n"
 else:
@@ -104,8 +91,6 @@ else:
         if tag == "NN" and word != "career":
             career = word
             break
-print(career)
-
 
 # Getting new course domain
 currSent = sents[6]
@@ -118,27 +103,6 @@ for word, tag in tagged:
         domain = word
         break
 
-print(domain)
-
-# # Getting previous courses
-# currSent = sents[4]
-# words = word_tokenize(currSent)
-# words = [word for word in words if word not in sw]
-# tagged = pos_tag(words)
-# prevCourses = []
-# for word, tag in tagged:
-#     if tag == "NNP":
-#         prevCourses.append(word)
-# prevCourses = formatLists(prevCourses)
-# print(prevCourses)
-
-
-# for token in tokens:
-# print(token, token.pos_)
-# if (token.pos_ == "PROPN"):
-# branch = token.text
-
-
 swipl = Prolog()
 swipl.consult("./electiveAdvisorySystem.pl")
 ans = list(
@@ -147,17 +111,3 @@ ans = list(
         % (semester, branch, addNewCourses, deleteCourses, minor, career, domain)
     )
 )
-# ans = list(swipl.query("start"))
-
-
-# print(ans)
-
-# for i in ans:
-# print(i)
-# break
-# break
-
-
-# print(courses)
-
-# print("working")

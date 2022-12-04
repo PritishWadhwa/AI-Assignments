@@ -1,1 +1,1 @@
-I want predictions for monsoon semester. My branch is csb. I want to add new courses. I also want to delete courses. I do not want to do minors. I want career specific suggestions regarding ml. I want courses of oth domain.
+I want predictions for winter semester. My branch is csai. I don't want to add new courses. I also do not want to delete courses. I want to do minors in ent. I want career specific suggestions regarding ml. I want courses of oth domain.

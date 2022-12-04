@@ -14,6 +14,7 @@ start(SemType, Branch, Add, Delete, Minor, Career, DepName) :-
     write('Enter the courses you have already decided to do in the current semester: (type done to stop)'), nl,
     take_input(CoursesDoing),
     combineList(CoursesDone, CoursesDoing, AllCourses),
+    write('Courses you should do in the current semester: '), nl,
     getCourses(SemType, DepName, CoursesDone, CoursesDoing, AllCourses), !.
 
 % If the user does not want courses related to career advice
@@ -21,11 +22,9 @@ suggestCareerCourses(n, _, _) :- !.
 
 % suggesting courses to the user relating to his/her choice of careers
 suggestCareerCourses(CareerPref, CoursesDone, SemType) :-
-    % write('Enter the career preference (ml: Machine Learning/ Data Science, bd: Big Data, sec: Security Related): '), nl,
-    % read(CareerPref),
     career(CareerPref, Courses),
     write('Suggested courses for your career preference: '), nl,
-    printListAfterRemovingAndCheckingSemesterAndPrereqs(Courses, CoursesDone, SemType).
+    printListAfterRemovingAndCheckingSemesterAndPrereqs(Courses, CoursesDone, SemType), !.
 
 % Deleting the courses as required by the user
 deleteCourse(n) :- !.
@@ -117,7 +116,7 @@ printListAfterRemovingAndCheckingPrereqs([ShortName | Tail], CoursesDone, Course
 suggestCoreCourses(SemType, Branch, PastCourses) :-
     core(Branch, CoreCourses),
     write('Core Courses to do are: '), nl,
-    printListAfterRemovingAndCheckingSemesterAndPrereqs(CoreCourses, PastCourses, SemType).
+    printListAfterRemovingAndCheckingSemesterAndPrereqs(CoreCourses, PastCourses, SemType), !.
 
 % code to suggest the minors
 suggestMinors(_, no, _) :- !.
@@ -126,7 +125,7 @@ suggestMinors(SemType, Minor, PastCourses) :-
     Minor \= no,
     minors(Minor, MinorCourses),
     write('Minor Courses to do are: '), nl,
-    printListAfterRemovingAndCheckingSemesterAndPrereqs(MinorCourses, PastCourses, SemType).
+    printListAfterRemovingAndCheckingSemesterAndPrereqs(MinorCourses, PastCourses, SemType), !.
 
 % code to suggest the courses after checking for antireqs
 printListAfterRemovingAndCheckingSemesterAndPrereqs([], _, _) :- 
@@ -553,4 +552,3 @@ course('ENT413', 'EF', 'Entrepreneurial Finance', [], [], [winter], [oth]).
 course('ENT415', 'NVP', 'New Venture Planning', [], [], [winter], [oth]).
 course('ENT414', 'RIPS', 'Relevance of Intellectual Property for Startups', [], [], [winter], [oth]).
 course('ENG599s', 'RM', 'Research Methods', [], [], [winter], [oth]).
-
